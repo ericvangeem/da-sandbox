@@ -11,6 +11,16 @@
       "url": "https://main--da-block-collection--aemsites.hlx.live/tools/demo/demo.html"
     },
     {
+      "id": "fragments",
+      "title": "Fragments",
+      "environments": ["edit"],
+      "daLibrary": true,
+      "includePaths": ["DA"],
+      "experience": "dialog",
+      "icon": "https://main--sling--da-pilot.aem.live/.da/icons/media_1754eba0e972f3aaa5a26e4cff5c8a1af99bbd324.png",
+      "path": "/tools/fragments/fragments.html"
+    },
+    {
       "id": "experimentation",
       "titleI18n": { "en": "Experimentation" },
       "environments": [ "dev", "preview" ],
