@@ -7,13 +7,33 @@
   position: relative;
   padding: 40px 24px;
   min-height: 300px;
+  display: flex;
+  align-items: center;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
+  z-index: -1;
 }
 
 .hero h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 650px;
+  margin: 0;
   color: var(--background-color);
+  position: relative;
+  padding: 2rem;
+}
+
+.hero h1::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: -1;
+  border-radius: 8px;
 }
 
 .hero picture {
@@ -32,6 +52,10 @@
 
 @media (width >= 900px) {
   .hero {
-    padding: 40px 32px;
+    padding: 64px;
+  }
+  
+  .hero h1 {
+    padding: 3rem;
   }
 }
