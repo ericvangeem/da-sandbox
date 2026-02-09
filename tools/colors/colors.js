@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved
 import DA_SDK from 'https://da.live/nx/utils/sdk.js';
 
-const COLORS_API_ENDPOINT = 'https://colors-worker.evangeem1.workers.dev/colors';
+const COLORS_API_ENDPOINT = 'https://colors-worker.evangeem1.workers.dev/api/colors';
 
 /**
  * Builds the fully qualified EDS URL for a color path
