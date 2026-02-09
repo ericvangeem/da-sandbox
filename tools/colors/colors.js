@@ -84,7 +84,7 @@ function displayColorsData(colorsData, actions, org, repo) {
     if (includeArchived) {
       return colorsData;
     }
-    return colorsData.filter((color) => color.archived !== 'Y');
+    return colorsData.filter((color) => !color.archived);
   }
 
   // Create search container
