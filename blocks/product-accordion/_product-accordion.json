@@ -1,0 +1,20 @@
+{
+  "definitions": [
+    {
+      "title": "Product Accordion",
+      "id": "product-accordion",
+      "plugins": {
+        "da": {
+          "name": "product-accordion"
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "product-accordion",
+      "fields": []
+    }
+  ],
+  "filters": []
+}

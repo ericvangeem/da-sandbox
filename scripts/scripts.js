@@ -12,6 +12,7 @@ import {
   loadSection,
   loadSections,
   loadCSS,
+  readBlockConfig,
   sampleRUM,
 } from './aem.js';
 
@@ -88,12 +89,84 @@ function autolinkModals(doc) {
 }
 
 /**
+ * Groups sections marked with block-name "product-accordion" in their
+ * section-metadata into a single synthetic product-accordion block.
+ * Consecutive sections sharing the same optional `id` metadata value are
+ * collapsed into one accordion; a change in `id` (or a non-accordion section
+ * in between) starts a new group.
+ *
+ * Must run before decorateSections so the raw section-metadata divs are
+ * still present in the DOM.
+ * @param {Element} main The container element
+ */
+function buildProductAccordionBlocks(main) {
+  const sections = [...main.querySelectorAll(':scope > div')];
+  const groups = [];
+  let currentGroup = null;
+
+  sections.forEach((section) => {
+    const sectionMeta = section.querySelector(':scope > div.section-metadata');
+    if (!sectionMeta) {
+      currentGroup = null;
+      return;
+    }
+
+    const meta = readBlockConfig(sectionMeta);
+    if (meta['block-name'] !== 'product-accordion') {
+      currentGroup = null;
+      return;
+    }
+
+    const groupId = meta.id || '';
+
+    if (!currentGroup || currentGroup.id !== groupId) {
+      currentGroup = { id: groupId, panels: [] };
+      groups.push(currentGroup);
+    }
+    currentGroup.panels.push({ section, meta });
+  });
+
+  groups.forEach(({ panels }) => {
+    const rows = panels.map(({ section, meta }) => {
+      // Remove section-metadata before moving content
+      section.querySelector(':scope > div.section-metadata')?.remove();
+
+      // Resolve panel label: explicit metadata title takes priority,
+      // otherwise promote the first heading and remove it from the body.
+      const titleEl = document.createElement('p');
+      if (meta.title) {
+        titleEl.textContent = meta.title;
+      } else {
+        const heading = section.querySelector('h1, h2, h3, h4, h5, h6');
+        if (heading) {
+          titleEl.innerHTML = heading.innerHTML;
+          heading.remove();
+        }
+      }
+
+      // Move remaining section content into the body cell
+      const body = document.createElement('div');
+      body.append(...[...section.childNodes]);
+
+      return [titleEl, body];
+    });
+
+    // Keep only the first section as the accordion's container;
+    // the rest have been drained into block rows above.
+    const [first, ...rest] = panels;
+    rest.forEach(({ section }) => section.remove());
+    first.section.append(buildBlock('product-accordion', rows));
+  });
+}
+
+/**
  * Builds all synthetic blocks in a container element.
  * @param {Element} main The container element
  */
 function buildAutoBlocks(main) {
   try {
     if (!main.querySelector('.hero')) buildHeroBlock(main);
+    buildProductAccordionBlocks(main);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Auto Blocking failed', error);
