@@ -144,11 +144,11 @@ function buildProductAccordionBlocks(main) {
         }
       }
 
-      // Move remaining section content into the body cell
-      const body = document.createElement('div');
-      body.append(...[...section.childNodes]);
-
-      return [titleEl, body];
+      // Pass section children directly via buildBlock's elems syntax so they
+      // land as direct children of the column element. Wrapping in an extra
+      // div would push nested blocks one level too deep for the decorator's
+      // '.accordion-item-body > div' selector to reach them.
+      return [titleEl, { elems: [...section.children] }];
     });
 
     // Keep only the first section as the accordion's container;
