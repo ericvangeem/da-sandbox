@@ -113,7 +113,7 @@ Sections may contain any EDS block alongside default content. Because nested blo
 4. For each group:
    - Remove the `section-metadata` div from each section.
    - Resolve the panel title: use the `title` metadata field if present; otherwise extract and remove the first heading from the section.
-   - Move the remaining section content into a body cell `<div>`.
+   - Pass the remaining section children directly into the body column via `buildBlock`'s `{ elems }` syntax, so they land as direct children of the column element (no extra wrapper div).
    - Call `buildBlock('product-accordion', rows)` and append it to the first section in the group.
    - Remove all other sections in the group from the DOM.
 
